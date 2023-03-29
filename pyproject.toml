@@ -9,6 +9,8 @@ readme = "README.md"
 python = ">3.8,<3.11"
 mesa = "^1.2.1"
 
+[tool.poetry.scripts]
+igia = "run:main"
 
 [build-system]
 requires = ["poetry-core"]
