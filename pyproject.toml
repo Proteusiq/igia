@@ -8,6 +8,7 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">3.8,<3.11"
 mesa = "^1.2.1"
+mimesis = "^7.0.0"
 
 [tool.poetry.scripts]
 igia = "run:main"
