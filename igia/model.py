@@ -2,24 +2,45 @@ from mesa import Agent, Model
 from mesa import time, space
 from mesa.datacollection import DataCollector
 
+from mimesis import Person
+from mimesis.locales import Locale
+
+
+
+
 class TraderAgent(Agent):  # noqa
     """
     An agent
     """
 
-    def __init__(self, unique_id, model):
+    def __init__(self, unique_id, name, model):
         """
         Customize the agent
         """
         self.unique_id = unique_id
+        self.name = name
         super().__init__(unique_id, model)
+
+        self.stocks = 15
+        self.worth = 100  # 15 * 100
 
     def step(self):
         """
         Modify this method to change what an individual agent will do during each step.
         Can include logic based on neighbors states.
         """
-        pass
+        # print(f"hello, I am {self.name} with ID {self.unique_id}")
+
+        if self.stocks == 0:
+            return
+        
+        other_trader = self.random.choice(self.model.schedule.agents)
+        print(f"Hello, I am {self.name} with {self.stocks} stocks"
+             f" I am giving 1 stock to {other_trader.name} with {other_trader.stocks} stocks")
+        
+        other_trader.stocks += 1
+        self.stocks -= 1
+
 
 
 class TraderModel(Model):
@@ -39,8 +60,9 @@ class TraderModel(Model):
         self.schedule = time.RandomActivation(self)
         self.grid = space.MultiGrid(width=width, height=height, torus=True)
 
-        for i in range(self.num_agents):
-            agent = TraderAgent(i, self)
+        person = Person(Locale.EN)
+        for _ in range(self.num_agents):
+            agent = TraderAgent(person.username(), person.full_name(), self)
             self.schedule.add(agent)
 
             x = self.random.randrange(self.grid.width)
@@ -58,4 +80,9 @@ class TraderModel(Model):
         A model step. Used for collecting data and advancing the schedule
         """
         self.datacollector.collect(self)
+
         self.schedule.step()
+
+         # 1 zero stocks
+        if sum(1 for trader in self.schedule.agents if trader.stocks == 0) == 1:
+            self.running = False
