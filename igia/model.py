@@ -1,7 +1,8 @@
-import mesa
+from mesa import Agent, Model
+from mesa import time, space
+from mesa.datacollection import DataCollector
 
-
-class TraderAgent(mesa.Agent):  # noqa
+class TraderAgent(Agent):  # noqa
     """
     An agent
     """
@@ -21,7 +22,7 @@ class TraderAgent(mesa.Agent):  # noqa
         pass
 
 
-class TraderModel(mesa.Model):
+class TraderModel(Model):
     """
     The model class holds the model-level attributes, manages the agents, and generally handles
     the global level of our model.
@@ -35,8 +36,8 @@ class TraderModel(mesa.Model):
     def __init__(self, num_agents, width, height):
         super().__init__()
         self.num_agents = num_agents
-        self.schedule = mesa.time.RandomActivation(self)
-        self.grid = mesa.space.MultiGrid(width=width, height=height, torus=True)
+        self.schedule = time.RandomActivation(self)
+        self.grid = space.MultiGrid(width=width, height=height, torus=True)
 
         for i in range(self.num_agents):
             agent = TraderAgent(i, self)
@@ -47,7 +48,7 @@ class TraderModel(mesa.Model):
             self.grid.place_agent(agent, (x, y))
 
         # example data collector
-        self.datacollector = mesa.datacollection.DataCollector()
+        self.datacollector = DataCollector()
 
         self.running = True
         self.datacollector.collect(self)
