@@ -31,6 +31,21 @@ class TraderAgent(Agent):  # noqa
         """
         # print(f"hello, I am {self.name} with ID {self.unique_id}")
 
+        self.exchange()
+        self.move()
+
+    def move(self):
+
+        possible_steps = self.model.grid.get_neighborhood(
+            self.pos,
+            moore=True,
+            include_center=False,
+        )
+
+        new_position = self.random.choice(possible_steps)
+        self.model.grid.move_agent(self, new_position)
+
+    def exchange(self):
         if self.stocks == 0:
             return
         
