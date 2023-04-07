@@ -46,9 +46,11 @@ Thank you for your interest in Igia! I hope you find this project informative an
 
 Tools and resources for more information on agent-based modeling, reinforcement learning, and stock trading strategies:
 
-Mesa [documentation](https://mesa.readthedocs.io/en/stable/)
-PyTorch [documentation](https://pytorch.org/docs/stable/index.html)
-Investopedia's [Guide to Stock Trading Strategies](https://www.investopedia.com/articles/active-trading/101014/basics-algorithmic-trading-concepts-and-examples.asp)
+- Mesa [documentation](https://mesa.readthedocs.io/en/stable/)
+
+- PyTorch [documentation](https://pytorch.org/docs/stable/index.html)
+
+- Investopedia's [Guide to Stock Trading Strategies](https://www.investopedia.com/articles/active-trading/101014/basics-algorithmic-trading-concepts-and-examples.asp)
 
 
 
