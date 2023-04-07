@@ -13,7 +13,7 @@ Please note that Igia is for educational purposes only, and should not be used f
 To install Igia, simply clone the repository and run `poetry install` in your terminal.
 
 ```bash
-git clone https://github.com/your_username/igia.git
+git clone https://github.com/proteusiq/igia.git
 cd igia
 poetry install
 ```
