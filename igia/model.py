@@ -6,6 +6,14 @@ from mimesis import Person
 from mimesis.locales import Locale
 
 
+def performers(model):
+    
+    return sum(1 for agent in model.schedule.agents if agent.stocks > 15)
+    
+
+def non_performers(model):
+
+    return sum(1 for agent in model.schedule.agents if agent.stocks < 15)
 
 
 class TraderAgent(Agent):  # noqa
@@ -65,7 +73,18 @@ class TraderAgent(Agent):  # noqa
         if self.stocks == 0:
             return
         
-        other_trader = self.random.choice(self.model.schedule.agents)
+        # any trader
+        # other_trader = self.random.choice(self.model.schedule.agents)
+
+        # traders on the same cell
+        other_traders = self.model.grid.get_cell_list_contents([self.pos])
+
+        # no trader in the same cell
+        if len(other_traders) == 0:
+            return
+
+        other_trader = self.random.choice(other_traders)
+
         print(f"Hello, I am {self.name} with {self.stocks} stocks"
              f" I am giving 1 stock to {other_trader.name} with {other_trader.stocks} stocks")
         
@@ -101,10 +120,13 @@ class TraderModel(Model):
             self.grid.place_agent(agent, (x, y))
 
         # example data collector
-        self.datacollector = DataCollector()
+        self.datacollector = DataCollector(
+            model_reporters={"Performers": performers,
+                             "Non Performers": non_performers}, 
+        )
 
         self.running = True
-        self.datacollector.collect(self)
+        
 
     def step(self):
         """
