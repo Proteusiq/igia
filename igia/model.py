@@ -7,13 +7,15 @@ from mimesis.locales import Locale
 
 
 def performers(model):
-    
     return sum(1 for agent in model.schedule.agents if agent.stocks > 15)
-    
+
+
+def middle_performers(model):
+    return sum(1 for agent in model.schedule.agents if 12 <= agent.stocks <= 15)
+
 
 def non_performers(model):
-
-    return sum(1 for agent in model.schedule.agents if agent.stocks < 15)
+    return sum(1 for agent in model.schedule.agents if agent.stocks < 12)
 
 
 class TraderAgent(Agent):  # noqa
@@ -32,18 +34,18 @@ class TraderAgent(Agent):  # noqa
         self.stocks = 15
         self._worth = 1
 
-    @property  
+    @property
     def wealth(self):
         return self.stocks * self._worth
-    
+
     @wealth.setter
     def wealth(self, value):
         raise ValueError(f"Agent's wealth is {self.wealth} and cannot be changed!")
-    
+
     @property
     def worth(self):
         return self._worth
-    
+
     @worth.setter
     def worth(self, value):
         self._worth = value
@@ -59,7 +61,6 @@ class TraderAgent(Agent):  # noqa
         self.move()
 
     def move(self):
-
         possible_steps = self.model.grid.get_neighborhood(
             self.pos,
             moore=True,
@@ -72,7 +73,7 @@ class TraderAgent(Agent):  # noqa
     def exchange(self):
         if self.stocks == 0:
             return
-        
+
         # any trader
         # other_trader = self.random.choice(self.model.schedule.agents)
 
@@ -85,12 +86,13 @@ class TraderAgent(Agent):  # noqa
 
         other_trader = self.random.choice(other_traders)
 
-        print(f"Hello, I am {self.name} with {self.stocks} stocks"
-             f" I am giving 1 stock to {other_trader.name} with {other_trader.stocks} stocks")
-        
+        print(
+            f"Hello, I am {self.name} with {self.stocks} stocks"
+            f" I am giving 1 stock to {other_trader.name} with {other_trader.stocks} stocks"
+        )
+
         other_trader.stocks += 1
         self.stocks -= 1
-
 
 
 class TraderModel(Model):
@@ -121,12 +123,14 @@ class TraderModel(Model):
 
         # example data collector
         self.datacollector = DataCollector(
-            model_reporters={"Performers": performers,
-                             "Non Performers": non_performers}, 
+            model_reporters={
+                "Performers": performers,
+                "Mid Performers": middle_performers,
+                "Non Performers": non_performers,
+            },
         )
 
         self.running = True
-        
 
     def step(self):
         """
@@ -136,6 +140,6 @@ class TraderModel(Model):
 
         self.schedule.step()
 
-         # 1 zero stocks
+        # 1 zero stocks
         if sum(1 for trader in self.schedule.agents if trader.stocks == 0) == 1:
             self.running = False

@@ -2,9 +2,22 @@
 Configure visualization elements and instantiate a server
 """
 
-from .model import TraderModel, TraderAgent  # noqa
+from mesa import visualization as vs
+from .model import TraderModel
 
-import mesa
+NUM_CEILS = 20
+SIZE_PIXEL_X = 860
+SIZE_PIXEL_Y = 400
+
+model_kwargs = {
+    "num_agents": vs.NumberInput(
+        name="Traders",
+        value=10,
+        description="Number of traders",
+    ),
+    "height": NUM_CEILS,
+    "width": NUM_CEILS,
+}
 
 
 def circle_portrayal_example(agent):
@@ -23,26 +36,30 @@ def circle_portrayal_example(agent):
 
     if agent.stocks > 15:
         portrayal["Color"] = "green"
-        portrayal["Layer"] = 0
-    elif agent.stocks < 15:
-        portrayal["Color"] = "grey"
         portrayal["Layer"] = 1
+
+    elif agent.stocks < 15:
+        portrayal["Color"] = "orange"
+        portrayal["Layer"] = 2
         portrayal["r"] = 0.2
 
     return portrayal
 
 
-canvas_element = mesa.visualization.CanvasGrid(
-    circle_portrayal_example, 20, 20, 500, 500
+canvas_element = vs.CanvasGrid(
+    circle_portrayal_example, NUM_CEILS, NUM_CEILS, SIZE_PIXEL_X, SIZE_PIXEL_Y
 )
-chart_element = mesa.visualization.ChartModule([{"Label": "Performers", "Color": "green"},
-                                                {"Label": "Non Performers", "Color": "red"},
-                                                ],
-                                               data_collector_name="datacollector",)
+chart_element = vs.ChartModule(
+    [
+        {"Label": "Performers", "Color": "green"},
+        {"Label": "Mid Performers", "Color": "orange"},
+        {"Label": "Non Performers", "Color": "red"},
+    ],
+    data_collector_name="datacollector",
+)
 
-model_kwargs = {"num_agents": 10, "width": 10, "height": 10}
 
-server = mesa.visualization.ModularServer(
+server = vs.ModularServer(
     TraderModel,
     [canvas_element, chart_element],
     "Igia",
