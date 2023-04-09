@@ -22,7 +22,23 @@ class TraderAgent(Agent):  # noqa
         super().__init__(unique_id, model)
 
         self.stocks = 15
-        self.worth = 100  # 15 * 100
+        self._worth = 1
+
+    @property  
+    def wealth(self):
+        return self.stocks * self._worth
+    
+    @wealth.setter
+    def wealth(self, value):
+        raise ValueError(f"Agent's wealth is {self.wealth} and cannot be changed!")
+    
+    @property
+    def worth(self):
+        return self._worth
+    
+    @worth.setter
+    def worth(self, value):
+        self._worth = value
 
     def step(self):
         """
