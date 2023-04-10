@@ -60,12 +60,13 @@ class TraderAgent(Agent):
         # other_trader = self.random.choice(self.model.schedule.agents)
 
         # traders on the same cell
-        other_traders = self.model.grid.get_cell_list_contents([self.pos])
+        all_traders = self.model.grid.get_cell_list_contents([self.pos])
 
         # no trader in the same cell
-        if len(other_traders) == 0:
-            return
+        if len(all_traders) < 2:
+            return 
 
+        other_traders = [agent for agent in all_traders if agent.unique_id != self.unique_id]
         other_trader = self.random.choice(other_traders)
 
         print(
