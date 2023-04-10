@@ -15,6 +15,7 @@ igia = "run:main"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
+ruff = "^0.0.261"
 
 [build-system]
 requires = ["poetry-core"]
