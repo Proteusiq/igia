@@ -1,5 +1,6 @@
 from mesa import Agent
 
+
 class TraderAgent(Agent):
     """
     An agent
@@ -64,9 +65,11 @@ class TraderAgent(Agent):
 
         # no trader in the same cell
         if len(all_traders) < 2:
-            return 
+            return
 
-        other_traders = [agent for agent in all_traders if agent.unique_id != self.unique_id]
+        other_traders = [
+            agent for agent in all_traders if agent.unique_id != self.unique_id
+        ]
         other_trader = self.random.choice(other_traders)
 
         print(
@@ -76,5 +79,3 @@ class TraderAgent(Agent):
 
         other_trader.stocks += 1
         self.stocks -= 1
-
-

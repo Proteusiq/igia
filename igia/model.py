@@ -8,7 +8,6 @@ from mimesis.locales import Locale
 from .agent import TraderAgent
 
 
-
 def performers(model):
     return sum(1 for agent in model.schedule.agents if agent.stocks > 15)
 
@@ -19,7 +18,6 @@ def middle_performers(model):
 
 def non_performers(model):
     return sum(1 for agent in model.schedule.agents if agent.stocks < 12)
-
 
 
 class TraderModel(Model):
